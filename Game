@@ -1,0 +1,101 @@
+# Tic-Tac-Toe Game with Player Choice
+
+
+board = ["-"] * 9
+player1 = player2 = None
+p1_char = p2_char = None
+
+# display the board
+def printBoard():
+    print()
+    print(f"{board[0]} | {board[1]} | {board[2]}")
+    print("--+---+--")
+    print(f"{board[3]} | {board[4]} | {board[5]}")
+    print("--+---+--")
+    print(f"{board[6]} | {board[7]} | {board[8]}")
+    print()
+
+# Function to check if anyone has won
+def checkBoard(board):
+    # Horizontal
+    for i in [0, 3, 6]:
+        if board[i] == board[i+1] == board[i+2] != "-":
+            return True
+    # Vertical
+    for i in [0, 1, 2]:
+        if board[i] == board[i+3] == board[i+6] != "-":
+            return True
+    # Diagonals
+    if board[0] == board[4] == board[8] != "-":
+        return True
+    if board[2] == board[4] == board[6] != "-":
+        return True
+    return False
+
+# Function to place a character
+def placeCharacter(pos, char):
+    pos = int(pos) - 1  # Convert 1-9 input to index 0-8
+    if pos < 0 or pos > 8:
+        print("Invalid position! Choose 1-9.")
+        return False
+    if board[pos] == "-":
+        board[pos] = char
+        return checkBoard(board)
+    else:
+        print("Position already taken. Try again!")
+        return False
+
+# Function to initialize the game and let player 1 choose X or O
+def gameInitialization():
+    global player1, player2, p1_char, p2_char
+    player1 = input("Enter player 1's name: ")
+    player2 = input("Enter player 2's name: ")
+
+    # Ask player1 to choose X or O
+    while True:
+        p1_char = input(f"{player1}, do you want to be X or O? ").upper()
+        if p1_char in ['X', 'O']:
+            break
+        else:
+            print("Invalid choice. Choose X or O.")
+
+    # Player2 gets the other character
+    p2_char = 'O' if p1_char == 'X' else 'X'
+
+    print(f"{player1} will be {p1_char}")
+    print(f"{player2} will be {p2_char}")
+
+    print("\nPositions are numbered as follows:")
+    print("1 | 2 | 3")
+    print("--+---+--")
+    print("4 | 5 | 6")
+    print("--+---+--")
+    print("7 | 8 | 9\n")
+
+# Function to run the game
+def runGame():
+    counter = 0
+    winner = None
+    while counter < 9:
+        printBoard()
+        if counter % 2 == 0:
+            pos = input(f"{player1}, where do you want to place '{p1_char}': ")
+            if placeCharacter(pos, p1_char):
+                winner = player1
+                break
+        else:
+            pos = input(f"{player2}, where do you want to place '{p2_char}': ")
+            if placeCharacter(pos, p2_char):
+                winner = player2
+                break
+        counter += 1
+
+    printBoard()
+    if winner:
+        print(f"{winner} has won the game!!!!")
+    else:
+        print("The game ends in a draw.")
+
+# Start the game
+gameInitialization()
+runGame()
